@@ -1,3 +1,33 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+    .heading-48 {
+        font-size: 3rem;
+        font-weight: bold;
+        font-family: 'Rubik', sans-serif;
+    }
+    .heading-36 {
+        font-size: 2.25rem;
+        font-weight: bold;
+        font-family: 'Rubik', sans-serif;
+    }
+    .heading-30 {
+        font-size: 1.875rem;
+        font-weight: bold;
+        font-family: 'Rubik', sans-serif;
+    }
+    .content-20 {
+        font-size: 1.25rem;
+        font-family: "IBM Plex Sans", "sans-serif";
+    }
+    .content-16 {
+        font-size: 1rem;
+        font-family: "IBM Plex Sans", "sans-serif";
+    }
+    .content-12 {
+        font-size: 0.75rem;
+        font-family: "IBM Plex Sans", "sans-serif";
+    }
+}
