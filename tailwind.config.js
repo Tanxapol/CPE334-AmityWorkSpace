@@ -14,13 +14,12 @@ export default {
         '55BDCA': "#55BDCA",
         '95FFFF': "#95FFFF",
         'C7EEF5': "#C7EEF5",
-        'black': "000000",
         'white': "#FFFFFF",
         'gradient': "#FFFBF2",
         'gd': "#E9FBFF",
       },
-      fontSize: {
-        
+      aspectRatio: {
+        '4/3': '4 / 3',
       }
     },
   },

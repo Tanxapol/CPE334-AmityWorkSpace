@@ -3,31 +3,61 @@
 @tailwind utilities;
 
 @layer components {
-    .heading-48 {
+    /* HEAD-5XL-48 */
+    .HEAD-5XL-48 {
         font-size: 3rem;
         font-weight: bold;
         font-family: 'Rubik', sans-serif;
     }
-    .heading-36 {
+
+    /* HEAD-4XL-36 */
+    .HEAD-4XL-36 {
         font-size: 2.25rem;
         font-weight: bold;
         font-family: 'Rubik', sans-serif;
     }
-    .heading-30 {
+
+    /* HEAD-3XL-30 */
+    .HEAD-3XL-30 {
         font-size: 1.875rem;
         font-weight: bold;
         font-family: 'Rubik', sans-serif;
     }
-    .content-20 {
+
+    /* CONTENT-XL-20 */
+    .CONTENT-XL-20 {
         font-size: 1.25rem;
         font-family: "IBM Plex Sans", "sans-serif";
     }
-    .content-16 {
+
+    /* CONTENT-LG-16 */
+    .CONTENT-LG-16 {
         font-size: 1rem;
         font-family: "IBM Plex Sans", "sans-serif";
     }
-    .content-12 {
+
+    /* CONTENT-BASE-12 */
+    .CONTENT-BASE-12 {
         font-size: 0.75rem;
+        font-family: "IBM Plex Sans", "sans-serif";
+    }
+
+    .topleft {
+        position: absolute;
+        top: 1rem;
+        left: 1rem;
+        color: white;
+        font-size: 1.875rem;
+        font-weight: bold;
+        font-family: 'Rubik', sans-serif;
+    }
+
+    .bottomleft {
+        position: absolute;
+        bottom: 8px;
+        left: 16px;
+        color: white;
+        font-size: 1rem;
         font-family: "IBM Plex Sans", "sans-serif";
     }
 }
