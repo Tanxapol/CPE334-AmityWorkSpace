@@ -11,9 +11,7 @@ const { Search } = Input;
 export default function Navuser() {
     // const [search, setSearch] = useState<string>('')
     const [isLogin, setIsLogin] = useState<boolean>(true)
-
     const onSearch: SearchProps['onSearch'] = (value, _e, info) => { console.log(info?.source, value); }
-
     const onClick = (path: string) => {
         console.log(path)
         setIsLogin(true)

@@ -1,17 +1,14 @@
 import { ConfigProvider, GetProps, Input } from "antd";
 
-type SearchProps = GetProps<typeof Input.Search>;
-
-const { Search } = Input;
-
-const onSearch: SearchProps['onSearch'] = (value, _e, info) => console.log(info?.source, value);
-
-
 export default function Homesec1() {
+
+    type SearchProps = GetProps<typeof Input.Search>;
+    const { Search } = Input;
+    const onSearch: SearchProps['onSearch'] = (value, _e, info) => console.log(info?.source, value);
 
     return (
         <>
-            <div className="flex flex-row flex-wrap items-center h-dvh w-full p-10 bg-gradient-to-r from-gradient to-gd">
+            <div className="flex flex-row flex-wrap items-center min-h-svh w-full p-10 bg-gradient-to-r from-gradient to-gd">
                 {/* left section */}
                 <div className=" basis-1/2">
                     <div className="justify-self-end flex-0">
@@ -27,13 +24,27 @@ export default function Homesec1() {
                         <ConfigProvider
                             theme={{
                                 token: {
-                                    colorPrimary: '#F07C41',
-                                    colorBgContainer: '#F07C41',
-                                    colorText: "#04244A",
-                                    colorTextPlaceholder: 'rgba(4, 36, 74, 0.50)',
-                                    colorIcon: "#ffffff",
+                                    colorBgBase: '#F07C41',
+                                    // colorPrimary: '#F07C41',
+                                    // colorBgContainer: '#F07C41',
+                                    // colorText: "#04244A",
+                                    // colorTextPlaceholder: 'rgba(4, 36, 74, 0.50)',
+                                    // colorIcon: "#ffffff",
+                                    // colorBorder: "#F07C41",
                                 },
+                                components: {
+                                    Button: {
+                                        colorPrimary: "#F07C41",
+                                    },
+                                    Input: {
+                                        // colorBgBase: '#F07C41',
+                                        colorText: "#04244A",
+                                        colorTextPlaceholder: "rgba(4, 36, 74, 0.50)",
+                                        colorBorder: "#F07C41",
+                                        activeBorderColor: "#F07C41",
 
+                                    }
+                                }
                             }}
                         >
                             <Search

@@ -1,7 +1,7 @@
 export default function Homesec3() {
     return (
         <>
-            <div className="flex items-center justify-center flex-col h-dvh w-full bg-gd">
+            <div className="flex items-center justify-center flex-col min-h-svh w-full bg-gd">
                 <div className="pb-20">
                     <p className="HEAD-5XL-48">
                         OUR PICKS FOR YOU
