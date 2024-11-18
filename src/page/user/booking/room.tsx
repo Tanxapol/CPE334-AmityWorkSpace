@@ -92,7 +92,7 @@ export default function Room() {
     return (
         <>
             <div className="flex flex-col w-full min-h-svh bg-gd">
-                <div className="flex flex-none items-center h-12 w-full bg-[#fefbf2] ">
+                <div className="flex flex-none items-center h-12 w-full bg-[#fefbf2]">
                     <div className="flex w-96">
                         <ConfigProvider
                             theme={{
