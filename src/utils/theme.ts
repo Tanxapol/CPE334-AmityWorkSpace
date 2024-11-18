@@ -11,9 +11,9 @@ export const theme: ThemeConfig = {
         Button: {
             colorPrimary: "#55BDCA",
             primaryColor: "#04244A",
-            colorPrimaryHover: "transparent",
-            colorPrimaryTextHover: "#55BDCA",
-            colorPrimaryBorderHover: "#55BDCA",
+            colorPrimaryHover: "#73C9D3",
+            // colorPrimaryTextHover: "#55BDCA",
+            // colorPrimaryBorderHover: "#55BDCA",
         },
         Input: {
             colorText: "#04244A",
