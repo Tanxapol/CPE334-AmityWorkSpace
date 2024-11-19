@@ -3,11 +3,12 @@ import Navbar from "./nav"
 import Footer from "../footer"
 
 const NavList = [
-    { name: "HOME", path: "/" },
-    { name: "ROOM", path: "/login" },
+    { name: "HOME", path: "/staff" },
+    { name: "ROOM", path: "/user/room" },
+    { name: "_staff", path: ""},
 ]
 
-export default function Navnologin() {
+export default function Navstaff() {
     return (
         <>
             <Navbar navList={NavList} />

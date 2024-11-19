@@ -2,24 +2,26 @@ const MockupActor = [
     {
         id: 1,
         role: "admin",
-        firstname: "John",
+        firstname: "Adam",
         lastname: "Doe",
-        email: "john.doe@wsa.com",
+        email: "adam.doe@wsa.com",
         password: "123456",
         phone_number: "0123456789",
         created_at: "2021-08-01",
-        updated_at: "2021-08-01"
+        updated_at: "2021-08-01",
+        token: 'eyJhbGciOiJIUzI1NiJ9.eyJmaXJzdG5hbWUiOiJBZGFtIiwicm9sZSI6ImFkbWluIiwiZW1haWwiOiJhZGFtLmRvZUB3c2EuY29tIiwibGFzdG5hbWUiOiJEb2UifQ.zQO5ZVMEei0EeGa9Nw9i8Bmy71znWHSZNJpF8VHR5lY',
     },
     {
         id: 2,
         role: "staff",
-        firstname: "Jane",
+        firstname: "Sara",
         lastname: "Doe",
-        email: "jane.doe@wsa.com",
+        email: "sara.doe@wsa.com",
         password: "123456",
         phone_number: "0123456789",
         created_at: "2021-08-01",
-        updated_at: "2021-08-01"
+        updated_at: "2021-08-01",
+        token: 'eyJhbGciOiJIUzI1NiJ9.eyJmaXJzdG5hbWUiOiJTYXJhIiwicm9sZSI6InN0YWZmIiwiZW1haWwiOiJzYXJhLmRvZUB3c2EuY29tIiwibGFzdG5hbWUiOiJEb2UifQ.NwaFex9nfZ--fIn9C0GIYz0OwoIkZguLIu2K0Hzm0PA',
     },
     {
         id: 3,
@@ -30,8 +32,9 @@ const MockupActor = [
         password: "123456",
         phone_number: "0123456789",
         created_at: "2021-08-01",
-        updated_at: "2021-08-01"
-    }
+        updated_at: "2021-08-01",
+        token: 'eyJhbGciOiJIUzI1NiJ9.eyJmaXJzdG5hbWUiOiJKaW0iLCJyb2xlIjoidXNlciIsImVtYWlsIjoiamltLmRvZUB3c2EuY29tIiwibGFzdG5hbWUiOiJEb2UifQ.b6hLnZ5U-D8uReYAsuu49JweSbqtFha2DeNlhXN8J5E',
+    },
 ];
 
 export default MockupActor;

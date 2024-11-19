@@ -41,6 +41,34 @@ const cardData = [
         image: "/image_72.png",
         amenities: ["Amenity 1", "Amenity 2", "Amenity 3"]
     },
+    {
+        key: '4',
+        title: "The parq",
+        location: "Bang kok",
+        image: "/image_72.png",
+        amenities: ["Amenity 1", "Amenity 2", "Amenity 3"]
+    },
+    {
+        key: '4',
+        title: "The parq",
+        location: "Bang kok",
+        image: "/image_72.png",
+        amenities: ["Amenity 1", "Amenity 2", "Amenity 3"]
+    },
+    {
+        key: '4',
+        title: "The parq",
+        location: "Bang kok",
+        image: "/image_72.png",
+        amenities: ["Amenity 1", "Amenity 2", "Amenity 3"]
+    },
+    {
+        key: '4',
+        title: "The parq",
+        location: "Bang kok",
+        image: "/image_72.png",
+        amenities: ["Amenity 1", "Amenity 2", "Amenity 3"]
+    },
 ];
 
 
@@ -91,8 +119,9 @@ export default function Room() {
 
     return (
         <>
-            <div className="flex flex-col w-full min-h-svh bg-gd">
-                <div className="flex flex-none items-center h-12 w-full bg-[#fefbf2]">
+            <div className="flex flex-col w-full min-h-screen bg-gd">
+                {/* bar */}
+                <div className="flex flex-none items-center h-12 w-full fixed z-10 bg-[#fefbf2]">
                     <div className="flex w-96">
                         <ConfigProvider
                             theme={{
@@ -144,15 +173,15 @@ export default function Room() {
 
                 </div>
 
-                <div className="flex flex-row w-full h-full">
-
-                    <div className="basis-1/2">
+                <div className="pt-12 flex relative">
+                    <div className="flex-1">
                         {cardData.map((card, index) => (
                             <Card
                                 key={index}
                                 className="m-4"
                                 hoverable
                                 bodyStyle={{ padding: 0 }} // Disable padding in the card body
+                                onClick={() => window.location.href = `booking/${card.key}`}
                             >
                                 <div className="flex flex-row h-full relative">
                                     <div className="p-1"><img src={card.image} alt="" className="w-full h-full object-cover aspect-4/3 rounded" /></div>
@@ -177,7 +206,8 @@ export default function Room() {
                         ))}
                     </div>
 
-                    <div className="basis-1/2">
+                    <div className="flex-1 h-svh sticky top-28">
+
                         <APIProvider apiKey="AIzaSyA2Mpr8UP4qBySvFbKQfIJx__06n0eJWMg">
                             <Map
                                 className="w-full h-full"
@@ -191,6 +221,7 @@ export default function Room() {
                                 <Marker key={index} position={marker} />
                             ))}
                         </APIProvider>
+
                     </div>
                 </div >
             </div >

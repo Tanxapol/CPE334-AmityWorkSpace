@@ -20,6 +20,16 @@ export const theme: ThemeConfig = {
             colorTextPlaceholder: "rgba(4, 36, 74, 0.50)",
             colorBorder: "#55bdca",
             activeBorderColor: "#55bdca",
+        },
+        Table: {
+            headerBg: "#04244A",
+            headerColor: "#ffffff",
+        },
+        DatePicker: {
+            colorPrimary: "#04244A",
+            colorPrimaryHover: "#55BDCA",
+            colorPrimaryActive: "#55BDCA",
         }
+
     }
 }

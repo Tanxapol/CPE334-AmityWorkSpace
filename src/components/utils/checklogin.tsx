@@ -1,6 +1,6 @@
 import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
-import { startTransition } from "react";
+import { decodedToken } from "./auth";
 
 interface Props {
     elements: JSX.Element;
@@ -8,18 +8,43 @@ interface Props {
 }
 
 const Checklogin = (children: Props) => {
-    if (children.islogin === 'no') return children.elements; // Render the wrapped components if the user is not authenticated
-    
+    // if (children.islogin === 'no') {
+    //     const user = decode
+    // } else
+    //     return children.elements; // Render the wrapped components if the user is not authenticated
+
     const location = useLocation();
 
     useEffect(() => {
-        const token = localStorage.getItem('token'); //Retrieve the token from local storage
+        const checkUser = async () => {
+            const token = localStorage.getItem('token'); // Retrieve the token from local storage
 
-        startTransition(() => {
-            // If no token is found, redirect to the root URL
-            if (!token) window.location.href = '/login';
-        });
+            const user = await decodedToken(); // Decode the token
 
+            if (token) {
+                if (children.islogin === 'no') {
+                    if (user?.role === 'user') {
+                        window.location.href = '/user';
+                    } else if (user?.role === 'staff') {
+                        window.location.href = '/staff';
+                    } else if (user?.role === 'admin') {
+                        window.location.href = '/admin';
+                    }
+                }
+
+            }
+            if (children.islogin === 'user' && user?.role !== 'user') {
+                window.location.href = '/';
+            } else if (children.islogin === 'staff' && user?.role !== 'staff') {
+                window.location.href = '/';
+            } else if (children.islogin === 'admin' && user?.role !== 'admin') {
+                window.location.href = '/';
+            }
+
+
+        };
+
+        checkUser(); // Call the checkUser function when the component is mounted
 
         return
     }, [location]); // Run this effect whenever the location changes
