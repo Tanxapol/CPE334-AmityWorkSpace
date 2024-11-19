@@ -5,7 +5,7 @@ import { useEffect, useState } from "react"
 import { Avatar, Button, DatePicker, Divider, Form, FormProps, List, TimePicker, Modal, Input } from "antd"
 import { BookingForm } from "../../types/booking"
 import { StarFilled } from "@ant-design/icons"
-import { FaDiceSix, FaHamburger, FaUserFriends } from "react-icons/fa"
+import { FaCheckCircle, FaDiceSix, FaHamburger, FaUserFriends } from "react-icons/fa"
 import { BsBarChartFill, BsGeoAltFill } from "react-icons/bs"
 import { CgGym, CgScreen } from "react-icons/cg"
 import { BiSolidExit } from "react-icons/bi"
@@ -59,9 +59,9 @@ export default function Booking() {
         setIsModalVisible(true);
 
         // Set a timeout to automatically close the modal after 5 seconds
-        // setTimeout(() => {
-        //     setIsModalVisible(false);
-        // }, 5000); // 5000 milliseconds = 5 seconds
+        setTimeout(() => {
+            setIsModalVisible(false);
+        }, 2000); // 5000 milliseconds = 5 seconds
     };
 
     const handleOk = () => {
@@ -170,12 +170,15 @@ export default function Booking() {
                             okText="Confirm"
                             cancelText="Cancel"
                             centered
-                            bodyStyle={{ padding: '20px' }}
                             closable={false}
+                            footer={null}
 
                         >
-                            <p>Custom content goes here...</p>
-                            <Input placeholder="Input something..." />
+                            <div className="flex flex-col items-center bg-04244A">
+                                <FaCheckCircle style={{ color: '#FFF', fontSize: '50px' }} />
+                                <p className="HEAD-4XL-36 text-white">BOOKING SUCCESS </p>
+                                <p className="CONTENT-LG-16 text-center text-white">Thank you for your booking! <br /> Your reservation has been successfully completed</p>
+                            </div>
                         </Modal>
                     </div>
 

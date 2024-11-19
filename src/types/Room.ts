@@ -8,6 +8,8 @@ export type Rooms = {
     country: string,
     postcode: string,
     imageURL: string,
+    lat: number,
+    lng: number,
     star: number,
 }
 
@@ -21,5 +23,7 @@ export interface RoomData {
     country: string,
     postcode: string,
     imageURL: string,
+    lat: number,
+    lng: number,
     star: number,
 }

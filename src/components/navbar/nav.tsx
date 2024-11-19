@@ -52,6 +52,7 @@ export default function Navbar({ navList }: props) {
                         className="pl-10 w-96"
                         placeholder="Search"
                         allowClear
+                        defaultValue={new URLSearchParams(window.location.search).get('search') || ''}
                         onSearch={onSearch}
                     />
                     {navList.map((item, index) => (

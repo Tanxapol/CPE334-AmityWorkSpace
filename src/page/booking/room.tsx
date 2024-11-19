@@ -1,83 +1,31 @@
 import { DownOutlined } from "@ant-design/icons";
 import { APIProvider, Map, Marker } from "@vis.gl/react-google-maps";
 import { Button, Card, ConfigProvider, Dropdown, GetProps, Input, Menu, MenuProps, Slider, Space } from "antd";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { CiSettings } from "react-icons/ci";
+import MockupRoom from "../../Data/MockupRoom";
 
 const center = { lat: 13.6507797, lng: 100.4945592 };
 
-const markers = [
-    { lat: 13.6507797, lng: 100.4945592 },
-    { lat: 13.650851812361767, lng: 100.49250059094778 },
-    { lat: 13.650070505803981, lng: 100.49813038670837 },
-]
-
-const cardData = [
-    {
-        key: '1',
-        title: "The parq",
-        location: "Bang kok",
-        image: "/image_72.png",
-        amenities: ["Amenity 1", "Amenity 2", "Amenity 3"]
-    },
-    {
-        key: '2',
-        title: "The parq",
-        location: "Bang kok",
-        image: "/image_72.png",
-        amenities: ["Amenity 1", "Amenity 2", "Amenity 3"]
-    },
-    {
-        key: '3',
-        title: "The parq",
-        location: "Bang kok",
-        image: "/image_72.png",
-        amenities: ["Amenity 1", "Amenity 2", "Amenity 3"]
-    },
-    {
-        key: '4',
-        title: "The parq",
-        location: "Bang kok",
-        image: "/image_72.png",
-        amenities: ["Amenity 1", "Amenity 2", "Amenity 3"]
-    },
-    {
-        key: '4',
-        title: "The parq",
-        location: "Bang kok",
-        image: "/image_72.png",
-        amenities: ["Amenity 1", "Amenity 2", "Amenity 3"]
-    },
-    {
-        key: '4',
-        title: "The parq",
-        location: "Bang kok",
-        image: "/image_72.png",
-        amenities: ["Amenity 1", "Amenity 2", "Amenity 3"]
-    },
-    {
-        key: '4',
-        title: "The parq",
-        location: "Bang kok",
-        image: "/image_72.png",
-        amenities: ["Amenity 1", "Amenity 2", "Amenity 3"]
-    },
-    {
-        key: '4',
-        title: "The parq",
-        location: "Bang kok",
-        image: "/image_72.png",
-        amenities: ["Amenity 1", "Amenity 2", "Amenity 3"]
-    },
-];
 
 
 export default function Room() {
     const [value, setValue] = useState(30);
+    const [hoveredMarker, setHoveredMarker] = useState<number | null>(null);
+    const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+    
 
     type SearchProps = GetProps<typeof Input.Search>;
     const { Search } = Input;
-    const onSearch: SearchProps['onSearch'] = (value, _e, info) => console.log(info?.source, value);
+    const onSearch: SearchProps['onSearch'] = (value, _e, info) => {
+        console.log("search input from orange one", info?.source, value);
+        const filteredroom = MockupRoom.filter((room) => room.title.toLowerCase().includes(value.toLowerCase()));
+        console.log("filtered room", filteredroom);
+        // window.location.href = `room?search=${value}`;
+        
+        
+    }
 
     const itemsCapacity: MenuProps['items'] = [
         {
@@ -89,6 +37,13 @@ export default function Room() {
             )
         },
     ]
+
+    const handleMarkerHover = (index: number) => {
+        setHoveredMarker(index);
+        if (cardRefs.current[index]) {
+            cardRefs.current[index]?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    };
 
     const itemDropSetting: MenuProps['items'] = [
         { key: '1', label: 'Booking' },
@@ -153,6 +108,7 @@ export default function Room() {
                                 className="px-3"
                                 type="primary"
                                 placeholder="Search"
+                                defaultValue={new URLSearchParams(window.location.search).get('search') || ''}
                                 allowClear
                                 onSearch={onSearch}
                                 enterButton
@@ -175,34 +131,38 @@ export default function Room() {
 
                 <div className="pt-12 flex relative">
                     <div className="flex-1">
-                        {cardData.map((card, index) => (
-                            <Card
+                        {MockupRoom.map((card, index) => (
+                            <div
                                 key={index}
-                                className="m-4"
-                                hoverable
-                                bodyStyle={{ padding: 0 }} // Disable padding in the card body
-                                onClick={() => window.location.href = `booking/${card.key}`}
+                                ref={(el) => (cardRefs.current[index] = el)}
+                                className={`m-4 ${hoveredMarker === index ? 'drop-shadow-lg' : ''}`}
                             >
-                                <div className="flex flex-row h-full relative">
-                                    <div className="p-1"><img src={card.image} alt="" className="w-full h-full object-cover aspect-4/3 rounded" /></div>
-                                    <div className="flex flex-col w-full m-4">
-                                        <p className="HEAD-3XL-30">{card.title}</p>
-                                        <p className="CONTENT-LG-16 h-max">{card.location}</p>
-                                        <div className="flex flex-row flex-wrap"><p className="pr-1">|</p>
-                                            {card.amenities.map((item, index) => (
-                                                <div className="pr-1" key={index}><p>{item} |</p></div>
-                                            ))}
+                                <Card
+                                    hoverable
+                                    bodyStyle={{ padding: 0 }} // Disable padding in the card body
+                                    onClick={() => window.location.href = `booking/${card.key}`}
+                                >
+                                    <div className="flex flex-row h-full relative">
+                                        <div className="p-1"><img src={card.image} alt="" className="w-full h-full object-cover aspect-4/3 rounded" /></div>
+                                        <div className="flex flex-col w-full m-4">
+                                            <p className="HEAD-3XL-30">{card.title}</p>
+                                            <p className="CONTENT-LG-16 h-max">{card.location}</p>
+                                            <div className="flex flex-row flex-wrap"><p className="pr-1">|</p>
+                                                {card.amenities.map((item, index) => (
+                                                    <div className="pr-1" key={index}><p>{item} |</p></div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                        <div className="absolute bottom-0 right-0">
+                                            <Dropdown menu={{ items: itemDropSetting }}>
+                                                <a onClick={(e) => e.preventDefault()}>
+                                                    <Space><Button type="primary"><CiSettings />Setting</Button></Space>
+                                                </a>
+                                            </Dropdown>
                                         </div>
                                     </div>
-                                    <div className="absolute bottom-0 right-0">
-                                        <Dropdown menu={{ items: itemDropSetting }}>
-                                            <a onClick={(e) => e.preventDefault()}>
-                                                <Space><Button type="primary"><CiSettings />Setting</Button></Space>
-                                            </a>
-                                        </Dropdown>
-                                    </div>
-                                </div>
-                            </Card>
+                                </Card>
+                            </div>
                         ))}
                     </div>
 
@@ -216,9 +176,13 @@ export default function Room() {
                                 gestureHandling={'greedy'}
                                 disableDefaultUI={true}
                             />
-
-                            {markers.map((marker, index) => (
-                                <Marker key={index} position={marker} />
+                            {MockupRoom.map((card, index) => (
+                                <Marker
+                                    key={index}
+                                    position={{ lat: card.lat, lng: card.lng }}
+                                    onMouseOver={() => handleMarkerHover(index)}
+                                    onMouseOut={() => setHoveredMarker(null)}
+                                />
                             ))}
                         </APIProvider>
 
