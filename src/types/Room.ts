@@ -11,6 +11,7 @@ export type Rooms = {
     lat: number,
     lng: number,
     star: number,
+    amenities: string[]
 }
 
 export interface RoomData {
@@ -26,4 +27,5 @@ export interface RoomData {
     lat: number,
     lng: number,
     star: number,
+    amenities: string[]
 }

@@ -14,7 +14,7 @@ export default function Room() {
     const [hoveredMarker, setHoveredMarker] = useState<number | null>(null);
     const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
 
-    
+
 
     type SearchProps = GetProps<typeof Input.Search>;
     const { Search } = Input;
@@ -23,8 +23,8 @@ export default function Room() {
         const filteredroom = MockupRoom.filter((room) => room.title.toLowerCase().includes(value.toLowerCase()));
         console.log("filtered room", filteredroom);
         // window.location.href = `room?search=${value}`;
-        
-        
+
+
     }
 
     const itemsCapacity: MenuProps['items'] = [
@@ -140,13 +140,13 @@ export default function Room() {
                                 <Card
                                     hoverable
                                     bodyStyle={{ padding: 0 }} // Disable padding in the card body
-                                    onClick={() => window.location.href = `booking/${card.key}`}
+                                    onClick={() => window.location.href = `booking/${card.id}`}
                                 >
                                     <div className="flex flex-row h-full relative">
-                                        <div className="p-1"><img src={card.image} alt="" className="w-full h-full object-cover aspect-4/3 rounded" /></div>
+                                        <div className="p-1"><img src={card.imageURL} alt="" className="w-96 h-full object-cover aspect-4/3 rounded" /></div>
                                         <div className="flex flex-col w-full m-4">
                                             <p className="HEAD-3XL-30">{card.title}</p>
-                                            <p className="CONTENT-LG-16 h-max">{card.location}</p>
+                                            <p className="CONTENT-LG-16 h-max">{card.country}</p>
                                             <div className="flex flex-row flex-wrap"><p className="pr-1">|</p>
                                                 {card.amenities.map((item, index) => (
                                                     <div className="pr-1" key={index}><p>{item} |</p></div>
