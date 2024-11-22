@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom"
-import { Rooms } from "../../types/room"
+import { Rooms } from "../../types/Room"
 import MockupRoom from "../../Data/MockupRoom"
 import { useEffect, useState } from "react"
 import { Avatar, Button, DatePicker, Divider, Form, FormProps, List, TimePicker, Modal, Input } from "antd"
