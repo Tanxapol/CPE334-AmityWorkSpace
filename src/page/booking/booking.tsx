@@ -134,7 +134,7 @@ export default function Booking() {
                             </Form.Item>
 
                             <Form.Item<BookingForm>
-                                label="Time Satrt"
+                                label="Time Start"
                                 name="timestart"
                                 rules={[{ required: true, message: 'Please input your time!' }]}
                             >
