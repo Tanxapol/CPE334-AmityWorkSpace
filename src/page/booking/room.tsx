@@ -1,20 +1,30 @@
 import { DownOutlined } from "@ant-design/icons";
 import { APIProvider, Map, Marker } from "@vis.gl/react-google-maps";
-import { Button, Card, ConfigProvider, Dropdown, GetProps, Input, Menu, MenuProps, Slider, Space } from "antd";
+import {
+  Button,
+  Card,
+  ConfigProvider,
+  Dropdown,
+  GetProps,
+  Input,
+  Menu,
+  MenuProps,
+  Slider,
+  Space,
+} from "antd";
 import { useRef, useState } from "react";
 import { CiSettings } from "react-icons/ci";
 import MockupRoom from "../../Data/MockupRoom";
 
 const center = { lat: 13.6507797, lng: 100.4945592 };
 
-
+console.log("this is mockupRoom", MockupRoom);
 
 export default function Room() {
     const [value, setValue] = useState(30);
     const [hoveredMarker, setHoveredMarker] = useState<number | null>(null);
+    const [filteredRooms, setFilteredRooms] = useState(MockupRoom);
     const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
-
-
 
     type SearchProps = GetProps<typeof Input.Search>;
     const { Search } = Input;
@@ -22,21 +32,38 @@ export default function Room() {
         console.log("search input from orange one", info?.source, value);
         const filteredroom = MockupRoom.filter((room) => room.title.toLowerCase().includes(value.toLowerCase()));
         console.log("filtered room", filteredroom);
+        setFilteredRooms(filteredroom);
         // window.location.href = `room?search=${value}`;
-
-
     }
 
-    const itemsCapacity: MenuProps['items'] = [
-        {
-            key: '1',
-            label: (
-                <div className=" flex w-20">
-                    <Slider marks={{ 0: '0', 5: '5', 10: '10', 20: '20' }} defaultValue={0} />
-                </div>
-            )
-        },
-    ]
+    const handleSliderChange = (value: number) => {
+        console.log("slider value", value);
+        setValue(value);
+    };
+    const itemsCapacity: MenuProps["items"] = [
+      {
+        key: "1",
+        label: (
+          <div className=" flex w-20">
+            <Slider
+              marks={{
+                0: "0",
+                100: "100",
+                200: "200",
+                300: "300",
+                400: "400",
+                500: "500",
+              }}
+              min={0}
+              max={500}
+              defaultValue={0}
+              onChange={handleSliderChange}
+              value={value}
+            />
+          </div>
+        ),
+      },
+    ];
 
     const handleMarkerHover = (index: number) => {
         setHoveredMarker(index);
@@ -52,16 +79,14 @@ export default function Room() {
         { key: '3', label: 'Delete' },
     ]
 
-    const handleSliderChange = (newValue: number) => {
-        setValue(newValue);
-    };
+
 
     const menu = (
         <Menu>
             <Menu.Item key="slider">
                 <Slider
                     min={0}
-                    max={100}
+                    max={1000}
                     onChange={handleSliderChange}
                     value={value}
                     railStyle={{ backgroundColor: '#55BDCA', height: 10 }} // Custom rail style
@@ -131,7 +156,7 @@ export default function Room() {
 
                 <div className="pt-12 flex relative">
                     <div className="flex-1">
-                        {MockupRoom.map((card, index) => (
+                        {filteredRooms.map((card, index) => (
                             <div
                                 key={index}
                                 ref={(el) => (cardRefs.current[index] = el)}
@@ -176,7 +201,7 @@ export default function Room() {
                                 gestureHandling={'greedy'}
                                 disableDefaultUI={true}
                             />
-                            {MockupRoom.map((card, index) => (
+                            {filteredRooms.map((card, index) => (
                                 <Marker
                                     key={index}
                                     position={{ lat: card.lat, lng: card.lng }}
