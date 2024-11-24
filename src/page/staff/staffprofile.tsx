@@ -10,7 +10,6 @@ import MockupComapany from "../../Data/MockupCompany";
 export default function StaffProfile() {
     const [user, setUser] = useState<Token | null>(null)
     const [markerPosition, setMarkerPosition] = useState<{ lat: number; lng: number } | null>(MockupComapany.lat && MockupComapany.lng ? { lat: MockupComapany.lat, lng: MockupComapany.lng } : null);
-    const [location, setLocation] = useState<Address | null>(null);
     const [mode, setMode] = useState<number>(0); // 0 = view, 1 = edit
 
     console.log('markker', markerPosition);
