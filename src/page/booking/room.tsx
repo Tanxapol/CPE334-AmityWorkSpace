@@ -23,7 +23,7 @@ import { decodedToken } from "../../components/utils/auth";
 
 export default function Room() {
     const [user, setUser] = useState<Token | null>(null)
-    const [value, setValue] = useState(30);
+    // const [value, setValue] = useState(30);
     const [hoveredMarker, setHoveredMarker] = useState<number | null>(null);
     const [filteredRooms, setFilteredRooms] = useState(MockupRoom);
     const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -53,7 +53,7 @@ export default function Room() {
 
     const handleSliderChange = (value: number) => {
         console.log("slider value", value);
-        setValue(value);
+        // setValue(value);
     };
 
     const itemsCapacity: MenuProps["items"] = [
