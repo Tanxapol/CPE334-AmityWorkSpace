@@ -1,4 +1,4 @@
-import { Button, Form, FormProps, Input } from "antd";
+import { Button, Form, FormProps, Input, message } from "antd";
 import { LoginForm } from "../../types/Auth";
 import { useEffect, useState } from "react";
 import { decodedToken, login } from "../../components/utils/auth";
@@ -26,11 +26,24 @@ export default function Login() {
         }
     }, []);
 
-    const onFinish: FormProps<LoginForm>['onFinish'] = async (values) => {
+    const onFinish = async (values: LoginForm) => {
         console.log('Input Success:', values);
-        login(values.email, values.password);
-        // window.location.href = '/';
+        try {
+            const response = await login(values.email, values.password);
+            if (response.id !== -1) {
+                // Handle successful login
+                console.log('Login Success:', response);
+                // Redirect to the desired page
+            } else {
+                // Handle login failure
+                message.error('Email or Password is wrong');
+            }
+        } catch (error) {
+            console.error('Login Error:', error);
+            message.error('Email or Password is wrong');
+        }
     }
+
     const onFinishFailed: FormProps<LoginForm>['onFinishFailed'] = (errorInfo) => {
         console.log('Input Failed:', errorInfo);
     }

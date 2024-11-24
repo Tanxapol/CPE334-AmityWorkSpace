@@ -2,8 +2,8 @@ import { useParams } from "react-router-dom"
 import { Rooms } from "../../types/Room"
 import MockupRoom from "../../Data/MockupRoom"
 import { useEffect, useState } from "react"
-import { Avatar, Button, DatePicker, Divider, Form, FormProps, List, TimePicker, Modal, Input } from "antd"
-import { BookingForm } from "../../types/booking"
+import { Avatar, Button, DatePicker, Divider, Form, FormProps, List, TimePicker, Modal } from "antd"
+import { BookingForm } from "../../types/ฺBooking"
 import { StarFilled } from "@ant-design/icons"
 import { FaCheckCircle, FaDiceSix, FaHamburger, FaUserFriends } from "react-icons/fa"
 import { BsBarChartFill, BsGeoAltFill } from "react-icons/bs"
@@ -52,7 +52,7 @@ const data = [
 export default function Booking() {
     const { room_id } = useParams<{ room_id: string }>()
     const [roomdetail, setRoomdetail] = useState<Rooms | null>(null)
-    const [isBooking, setIsBooking] = useState<boolean>(true)
+    const [isBooking, setIsBooking] = useState<boolean>(false)
     const [isModalVisible, setIsModalVisible] = useState(false);
 
     const showModal = () => {
@@ -80,6 +80,7 @@ export default function Booking() {
                 console.log("Room detail:", room_detail);
 
                 setRoomdetail(room_detail)
+                setIsBooking(room_detail.isbooked)
             } else {
                 setRoomdetail(null)
             }
@@ -105,12 +106,15 @@ export default function Booking() {
                     <p className="text-2xl font-bold">{roomdetail?.country}</p>
                     <p className="CONTENT-LG-16">{roomdetail?.building}, {roomdetail?.street}, {roomdetail?.subdistrict}, {roomdetail?.district}, {roomdetail?.country}, {roomdetail?.postcode}</p>
                 </div>
+
                 <div className="flex flex-wrap ">
-                    <div className="basis-1/2 pr-10 py-4"><img
-                        src={`${roomdetail?.imageURL}`}
-                        alt="Room"
-                        className=" h-96 w-full object-cover aspect-video rounded-xl mr-4"
-                    /></div>
+                    <div className="basis-1/2 pr-10 py-4">
+                        <img
+                            src={`${roomdetail?.imageURL}`}
+                            alt="Room"
+                            className=" h-96 w-full object-cover aspect-video rounded-xl mr-4"
+                        />
+                    </div>
                     <div className="basis-1/2 pt-4">
                         <p className="HEAD-4XL-36">BOOKING</p>
                         <Form
@@ -221,15 +225,17 @@ export default function Booking() {
 
                 {/* Review */}
                 {isBooking ? (
-                    <div className="pt-10 h-full">
+                    <div className="pt-10 flex flex-col h-[30rem]">
                         <p className="HEAD-3XL-30">Review</p>
-                        {/* <p className="CONTENT-LG-16">123</p> */}
                         <Divider />
                         <List
+
                             itemLayout="horizontal"
                             dataSource={data}
                             renderItem={(item, index) => (
-                                <List.Item>
+                                <List.Item
+                                    className="h-full"
+                                >
                                     <List.Item.Meta
                                         avatar={<Avatar src={`https://api.dicebear.com/7.x/miniavs/svg?seed=${index}`} />}
                                         title={<a href="https://ant.design">{item.title}</a>}

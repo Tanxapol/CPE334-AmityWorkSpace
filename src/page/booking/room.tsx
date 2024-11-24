@@ -1,30 +1,42 @@
 import { DownOutlined } from "@ant-design/icons";
 import { APIProvider, Map, Marker } from "@vis.gl/react-google-maps";
 import {
-  Button,
-  Card,
-  ConfigProvider,
-  Dropdown,
-  GetProps,
-  Input,
-  Menu,
-  MenuProps,
-  Slider,
-  Space,
+    Button,
+    Card,
+    ConfigProvider,
+    Dropdown,
+    GetProps,
+    Input,
+    MenuProps,
+    Slider,
+    Space,
+    DatePicker,
 } from "antd";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { CiSettings } from "react-icons/ci";
 import MockupRoom from "../../Data/MockupRoom";
+import { Token } from "../../types/Token";
+import { decodedToken } from "../../components/utils/auth";
 
-const center = { lat: 13.6507797, lng: 100.4945592 };
 
-console.log("this is mockupRoom", MockupRoom);
 
 export default function Room() {
+    const [user, setUser] = useState<Token | null>(null)
     const [value, setValue] = useState(30);
     const [hoveredMarker, setHoveredMarker] = useState<number | null>(null);
     const [filteredRooms, setFilteredRooms] = useState(MockupRoom);
     const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const fetchUser = async () => {
+            const decoded = await decodedToken();
+            setUser(decoded);
+        };
+
+        fetchUser();
+    }, [])
 
     type SearchProps = GetProps<typeof Input.Search>;
     const { Search } = Input;
@@ -36,120 +48,146 @@ export default function Room() {
         // window.location.href = `room?search=${value}`;
     }
 
+    console.log("this is mockupRoom", MockupRoom);
+
+
     const handleSliderChange = (value: number) => {
         console.log("slider value", value);
         setValue(value);
     };
+
     const itemsCapacity: MenuProps["items"] = [
-      {
-        key: "1",
-        label: (
-          <div className=" flex w-20">
-            <Slider
-              marks={{
-                0: "0",
-                100: "100",
-                200: "200",
-                300: "300",
-                400: "400",
-                500: "500",
-              }}
-              min={0}
-              max={500}
-              defaultValue={0}
-              onChange={handleSliderChange}
-              value={value}
-            />
-          </div>
-        ),
-      },
+        {
+            key: "1",
+            label: (
+                <div className="w-[15.625rem]">
+                    <Slider
+                        min={0}
+                        max={20}
+                        defaultValue={3}
+                        marks={{
+                            0: '0',
+                            5: '5',
+                            10: '10',
+                            15: '15',
+                            20: '20+',
+                        }}
+                        onChange={handleSliderChange}
+                    />
+                </div>
+            ),
+        },
     ];
 
     const handleMarkerHover = (index: number) => {
         setHoveredMarker(index);
         if (cardRefs.current[index]) {
-            cardRefs.current[index]?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            cardRefs.current[index]?.scrollIntoView({ behavior: 'smooth', block: 'end' });
         }
     };
+    const ItemAmenities: MenuProps["items"] = [
+        { key: '1', label: 'Bike storage' },
+        { key: '2', label: 'Pet-friendly' },
+        { key: '3', label: 'Espresso bar' },
+        { key: '4', label: 'Event space' },
+        { key: '5', label: 'Outdoor space' },
+        { key: '6', label: 'Parking' },
+        { key: '7', label: 'Showers' },
+        { key: '8', label: 'Wellness room' },
+    ];
 
-    const itemDropSetting: MenuProps['items'] = [
-        { key: '1', label: 'Booking' },
+    const itemDropSetting = (): MenuProps['items'] => [
+        { key: '1', label: 'Booking', onClick: () => { navigate(`report/`) } },
         { type: 'divider' },
-        { key: '2', label: 'Setting' },
-        { key: '3', label: 'Delete' },
+        { key: '2', label: 'Setting', onClick: () => { navigate('setting/') } },
+        { key: '3', label: 'Delete', onClick: () => { } },
     ]
 
-
-
-    const menu = (
-        <Menu>
-            <Menu.Item key="slider">
-                <Slider
-                    min={0}
-                    max={1000}
-                    onChange={handleSliderChange}
-                    value={value}
-                    railStyle={{ backgroundColor: '#55BDCA', height: 10 }} // Custom rail style
-                    trackStyle={{ backgroundColor: '#04244A', height: 10 }} // Custom track style
-                    handleStyle={{ borderColor: '#F07C41', height: 20, width: 20 }} // Custom handle style
-                />
-            </Menu.Item>
-        </Menu>
-    );
+    // const menu = (
+    //     <Menu>
+    //         <Menu.Item key="slider">
+    //             <Slider
+    //                 min={0}
+    //                 max={1000}
+    //                 onChange={handleSliderChange}
+    //                 value={value}
+    //                 railStyle={{ backgroundColor: '#55BDCA', height: 10 }} // Custom rail style
+    //                 trackStyle={{ backgroundColor: '#04244A', height: 10 }} // Custom track style
+    //                 handleStyle={{ borderColor: '#F07C41', height: 20, width: 20 }} // Custom handle style
+    //             />
+    //         </Menu.Item>
+    //     </Menu>
+    // );
 
     return (
         <>
             <div className="flex flex-col w-full min-h-screen bg-gd">
                 {/* bar */}
-                <div className="flex flex-none items-center h-12 w-full fixed z-10 bg-[#fefbf2]">
-                    <div className="flex w-96">
-                        <ConfigProvider
-                            theme={{
-                                token: {
-                                    colorBgBase: '#F07C41',
-                                    // colorPrimary: '#F07C41',
-                                    // colorBgContainer: '#F07C41',
-                                    // colorText: "#04244A",
-                                    // colorTextPlaceholder: 'rgba(4, 36, 74, 0.50)',
-                                    // colorIcon: "#ffffff",
-                                    // colorBorder: "#F07C41",
-                                },
-                                components: {
-                                    Button: {
-                                        colorPrimary: "#F07C41",
+                <div className="flex flex-none items-center justify-between h-12 w-full fixed z-10 bg-[#fefbf2]">
+                    <div className="flex items-center">
+                        <div className="flex w-96">
+                            <ConfigProvider
+                                theme={{
+                                    token: {
+                                        colorBgBase: '#F07C41',
+                                        // colorPrimary: '#F07C41',
+                                        // colorBgContainer: '#F07C41',
+                                        // colorText: "#04244A",
+                                        // colorTextPlaceholder: 'rgba(4, 36, 74, 0.50)',
+                                        // colorIcon: "#ffffff",
+                                        // colorBorder: "#F07C41",
                                     },
-                                    Input: {
-                                        // colorBgBase: '#F07C41',
-                                        colorText: "#04244A",
-                                        colorTextPlaceholder: "rgba(4, 36, 74, 0.50)",
-                                        colorBorder: "#F07C41",
-                                        activeBorderColor: "#F07C41",
+                                    components: {
+                                        Button: {
+                                            colorPrimary: "#F07C41",
+                                        },
+                                        Input: {
+                                            // colorBgBase: '#F07C41',
+                                            colorText: "#04244A",
+                                            colorTextPlaceholder: "rgba(4, 36, 74, 0.50)",
+                                            colorBorder: "#F07C41",
+                                            activeBorderColor: "#F07C41",
 
+                                        }
                                     }
-                                }
-                            }}
-                        >
-                            <Search
-                                className="px-3"
-                                type="primary"
-                                placeholder="Search"
-                                defaultValue={new URLSearchParams(window.location.search).get('search') || ''}
-                                allowClear
-                                onSearch={onSearch}
-                                enterButton
-                            />
-                        </ConfigProvider>
+                                }}
+                            >
+                                <Search
+                                    className="px-3"
+                                    type="primary"
+                                    placeholder="Search"
+                                    defaultValue={new URLSearchParams(window.location.search).get('search') || ''}
+                                    allowClear
+                                    onSearch={onSearch}
+                                    enterButton
+                                />
+                            </ConfigProvider>
+                        </div>
+                        <div className="flex space-x-4">
+                            <Dropdown menu={{ items: itemsCapacity }}>
+                                <a onClick={(e) => e.preventDefault()}>
+                                    <Space>Capacity<DownOutlined /></Space>
+                                </a>
+                            </Dropdown>
+                            <Dropdown overlay={<DatePicker onChange={(e) => console.log("date selected", e)} />}>
+                                <a>
+                                    <Space>
+                                        Move-in
+                                        <DownOutlined />
+                                    </Space>
+                                </a>
+                            </Dropdown>
+                            <Dropdown menu={{ items: ItemAmenities }}>
+                                <a onClick={(e) => e.preventDefault()}>
+                                    <Space>Amenities<DownOutlined /></Space>
+                                </a>
+                            </Dropdown>
+                        </div>
                     </div>
-                    <div>
-                        <Dropdown menu={{ items: itemsCapacity }}>
-                            <a onClick={(e) => e.preventDefault()}>
-                                <Space>Capacity<DownOutlined /></Space>
-                            </a>
-                        </Dropdown>
 
-                        <Dropdown overlay={menu} trigger={['click']}>
-                            <Button type="primary">Open Slider</Button>
-                        </Dropdown>
+                    <div className="px-3">
+                        {user?.role && ['staff', 'admin'].includes(user.role) ? <Button onClick={() => window.location.href = "createroom"} type="primary">CREATE</Button> : null}
+                        {/* <Button type="primary">CREATE</Button> */}
                     </div>
 
                 </div>
@@ -179,11 +217,15 @@ export default function Room() {
                                             </div>
                                         </div>
                                         <div className="absolute bottom-0 right-0">
-                                            <Dropdown menu={{ items: itemDropSetting }}>
-                                                <a onClick={(e) => e.preventDefault()}>
-                                                    <Space><Button type="primary"><CiSettings />Setting</Button></Space>
-                                                </a>
-                                            </Dropdown>
+                                            {user?.role && ['staff', 'admin'].includes(user.role) ?
+                                                <Dropdown menu={{ items: itemDropSetting() }}>
+                                                    <Button type="primary"><CiSettings />Setting</Button>
+                                                    {/* <Space></Space> */}
+                                                    {/* <a onClick={(e) => e.preventDefault()}>
+                                                    </a> */}
+                                                </Dropdown>
+                                                : null
+                                            }
                                         </div>
                                     </div>
                                 </Card>
@@ -196,7 +238,7 @@ export default function Room() {
                         <APIProvider apiKey="AIzaSyA2Mpr8UP4qBySvFbKQfIJx__06n0eJWMg">
                             <Map
                                 className="w-full h-full"
-                                defaultCenter={center}
+                                defaultCenter={{ lat: 13.6507797, lng: 100.4945592 }}
                                 defaultZoom={15}
                                 gestureHandling={'greedy'}
                                 disableDefaultUI={true}
@@ -205,7 +247,8 @@ export default function Room() {
                                 <Marker
                                     key={index}
                                     position={{ lat: card.lat, lng: card.lng }}
-                                    onMouseOver={() => handleMarkerHover(index)}
+                                    
+                                    onMouseOver={() => { handleMarkerHover(index) }}
                                     onMouseOut={() => setHoveredMarker(null)}
                                 />
                             ))}

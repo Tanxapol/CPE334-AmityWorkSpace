@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Route, Routes, Outlet } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import { Suspense } from "react";
 import Checklogin from './components/utils/checklogin';
 import Home from './page/home';
@@ -12,17 +12,22 @@ import Navstaff from './components/navbar/navstaff';
 import Navadmin from './components/navbar/navadmin';
 import UserProfile from './page/user/userprofile';
 import Booking from './page/booking/booking';
-import Testslide from './page/testslide';
+import StaffProfile from './page/staff/staffprofile';
+import AdminProfile from './page/admin/adminprofile';
+import Createroom from './page/createroom/createroom';
+import Reportbooking from './page/admin/reportbooking';
+import Review from './page/booking/review';
 
 export default function App() {
   return (
     <Router>
       <main className="bg-gradient-to-r min-h-dvh from-gradient to-gd">
         <Suspense fallback={<div>Loading...</div>}>
-          <Routes>
-            {/* UNLOGIN */}
+          <Routes>\
+            {/* NOT PAGE */}
             <Route path="*" element={<Notfound />} />
 
+            {/* UNLOGIN */}
             <Route
               element={<Checklogin islogin="no" elements={<Navnologin />} />}
             >
@@ -38,11 +43,10 @@ export default function App() {
               element={<Checklogin islogin="user" elements={<Navuser />} />}
             >
               <Route index element={<p>user index</p>} />
-              <Route path="dashboard" element={<p>Dashboard</p>} />
               <Route path="room" element={<Room />} />
               <Route path="booking/:room_id" element={<Booking />} />
               <Route path="profile" element={<UserProfile />} />
-              <Route path="testslide" element={<Testslide />} />
+              <Route path='review/:room_id' element={<Review />} />
             </Route>
 
             {/* LOGIN  Staff*/}
@@ -51,8 +55,9 @@ export default function App() {
               element={<Checklogin islogin="staff" elements={<Navstaff />} />}
             >
               <Route index element={<p>staff index</p>} />
-              <Route path="dashboard" element={<p>Dashboard</p>} />
               <Route path="room" element={<Room />} />
+              <Route path='profile' element={<StaffProfile />} />
+              <Route path='createroom' element={<Createroom />} />
             </Route>
 
             {/* LOGIN  Admin*/}
@@ -61,8 +66,11 @@ export default function App() {
               element={<Checklogin islogin="admin" elements={<Navadmin />} />}
             >
               <Route index element={<p>admin index</p>} />
-              <Route path="dashboard" element={<p>Dashboard</p>} />
               <Route path="room" element={<Room />} />
+              <Route path='profile' element={<AdminProfile />} />
+              <Route path='room/reprot/:room_id' element={<Reportbooking />} />
+              <Route path='room/report/booking/:room_id' element={<Reportbooking />} />
+              <Route path='booking/:room_id' element={<Review />} />
             </Route>
           </Routes>
         </Suspense>

@@ -2,90 +2,8 @@ import { Button, Table, TableColumnsType } from "antd";
 import { useEffect, useState } from "react";
 import { Token } from "../../types/Token";
 import { decodedToken, logout } from "../../components/utils/auth";
-
-interface BookingDetail {
-    number: number;
-    name: string;
-    date: string;
-    timestart: string;
-    timeend: string;
-}
-
-const bookingDetail: BookingDetail[] = [
-    {
-        number: 1,
-        name: "Room 1",
-        date: "2024-12-01",
-        timestart: "08:00",
-        timeend: "10:00",
-    },
-    {
-        number: 2,
-        name: "Room 2",
-        date: "2024-12-01",
-        timestart: "10:00",
-        timeend: "12:00",
-    },
-    {
-        number: 3,
-        name: "Room 3",
-        date: "2024-12-01",
-        timestart: "12:00",
-        timeend: "14:00",
-    },
-    {
-        number: 4,
-        name: "Room 4",
-        date: "2024-12-01",
-        timestart: "14:00",
-        timeend: "16:00",
-    },
-    {
-        number: 5,
-        name: "Room 5",
-        date: "2024-12-01",
-        timestart: "16:00",
-        timeend: "18:00",
-    },
-]
-
-const history: BookingDetail[] = [
-    {
-        number: 1,
-        name: "Room 11",
-        date: "2024-12-01",
-        timestart: "08:00",
-        timeend: "10:00",
-    },
-    {
-        number: 2,
-        name: "Room 12",
-        date: "2024-12-01",
-        timestart: "10:00",
-        timeend: "12:00",
-    },
-    {
-        number: 3,
-        name: "Room 13",
-        date: "2024-12-01",
-        timestart: "12:00",
-        timeend: "14:00",
-    },
-    {
-        number: 4,
-        name: "Room 14",
-        date: "2024-12-01",
-        timestart: "14:00",
-        timeend: "16:00",
-    },
-    {
-        number: 5,
-        name: "Room 15",
-        date: "2024-12-01",
-        timestart: "16:00",
-        timeend: "18:00",
-    },
-]
+import { BookingHistoryData } from "../../types/Profile";
+import MockupBookingDetail from "../../Data/MockupBookingDetail";
 
 export default function UserProfile() {
     const [table, setTable] = useState(0)
@@ -100,7 +18,7 @@ export default function UserProfile() {
         fetchUser();
     }, [])
 
-    const coldetail: TableColumnsType<BookingDetail> = [
+    const coldetail: TableColumnsType<BookingHistoryData> = [
         {
             title: "NUMBER",
             dataIndex: "number",
@@ -126,19 +44,19 @@ export default function UserProfile() {
             dataIndex: "time",
             key: "time",
             align: "center",
-            render: (_value: any, item: BookingDetail) => `${item.timestart} - ${item.timeend}`,
+            render: (_value: any, item: BookingHistoryData) => `${item.timestart} - ${item.timeend}`,
         },
         {
             title: "",
             key: "action",
-            render: () => (
+            render: (_value, _item) => (
                 <div className="flex">
                     {table ? (
                         <Button type="primary" className="ml-4">REVIEW</Button>
                     ) : (
                         <>
                             <Button type="primary">CANCEL</Button>
-                            <Button type="primary" className="ml-4">REVIEW</Button>
+                            <Button onClick={() => window.location.href=`review/${_item.room_id}`} type="primary" className="ml-4">REVIEW</Button>
                         </>
                     )}
                 </div>
@@ -172,7 +90,7 @@ export default function UserProfile() {
 
                 <div className="pt-4">
                     <Table
-                        dataSource={{ 0: bookingDetail, 1: history }[table]}
+                        dataSource={table === 0 ? MockupBookingDetail.filter((item) => new Date(item.date) > new Date()) : MockupBookingDetail.filter((item) => new Date(item.date) < new Date())}
                         columns={coldetail}
                     />
                 </div>

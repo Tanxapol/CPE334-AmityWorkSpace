@@ -14,6 +14,7 @@ const MockupRoom = [
     lng: 100.49933575141308,
     star: 5.0,
     amenities: ["Amenity 1", "Amenity 2", "Amenity 3"],
+    isbooked: true,
   },
   {
     id: 2,
@@ -30,6 +31,7 @@ const MockupRoom = [
     lng: 100.49612568489835,
     star: 5.0,
     amenities: ["Amenity 1", "Amenity 2", "Amenity 3"],
+    isbooked: true,
   },
   {
     id: 3,
@@ -46,6 +48,7 @@ const MockupRoom = [
     lng: 100.49164212228366,
     star: 4.5,
     amenities: ["Amenity 4", "Amenity 5", "Amenity 6"],
+    isbooked: true,
   },
   {
     id: 4,
@@ -62,6 +65,7 @@ const MockupRoom = [
     lng: 100.48667241158704,
     star: 4.8,
     amenities: ["Amenity 7", "Amenity 8", "Amenity 9"],
+    isbooked: true,
   },
   {
     id: 5,
@@ -78,6 +82,7 @@ const MockupRoom = [
     lng: 100.48941068444326,
     star: 4.7,
     amenities: ["Amenity 10", "Amenity 11", "Amenity 12"],
+    isbooked: true,
   },
 ];
 
