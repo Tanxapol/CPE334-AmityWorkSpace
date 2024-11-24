@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router-dom"
+import { useParams } from "react-router-dom"
 import { Rooms } from "../../types/Room"
 import MockupRoom from "../../Data/MockupRoom"
 import { useEffect, useState } from "react"
@@ -60,7 +60,6 @@ export default function Review() {
     const { room_id } = useParams<{ room_id: string }>()
     const [roomdetail, setRoomdetail] = useState<Rooms | null>(null)
     const [user, setUser] = useState<Token | null>(null)
-    const navigate = useNavigate();
 
     useEffect(() => {
         try {
