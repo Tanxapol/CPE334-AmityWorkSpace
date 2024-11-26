@@ -4,39 +4,43 @@ import { Token } from "../../types/Token";
 import { decodedToken, logout } from "../../components/utils/auth";
 import { BookingHistoryData } from "../../types/Profile";
 import MockupBookingDetail from "../../Data/MockupBookingDetail";
+import { BookingDetailData } from "../../types/ฺBooking"
 import axios from "axios"
 import MockupRoom from "../../Data/MockupRoom"
-
-// Fetch bookings from DB & Set room name
-const user = await decodedToken(); 
-
-let bookingDetail = (await axios.get(`http://localhost:2000/api/booking/listBookingByActor/${user?.email}`)).data;
-for (let i = 0; i < bookingDetail.length; i++) {
-    for (const room of MockupRoom) {
-        if (bookingDetail[i].room_id === room.id){
-            bookingDetail[i].name = room.title;
-            break;
-        } 
-    }
-}
-
-let history = (await axios.get(`http://localhost:2000/api/booking/listHistoryByActor/${user?.email}`)).data;
-for (let i = 0; i < history.length; i++) {
-    for (const room of MockupRoom) {
-        if (history[i].room_id === room.id){
-            history[i].name = room.title;
-            break;
-        } 
-    }
-}
 
 export default function UserProfile() {
     const [table, setTable] = useState(0)
     const [user, setUser] = useState<Token | null>(null)
+    const [bookingDetail, setBookingDetail] = useState<BookingDetailData[]>([])
+    const [history, setHistory] = useState<BookingDetailData[]>([])
 
     useEffect(() => {
         const fetchUser = async () => {
             const decoded = await decodedToken();
+
+            // Fetch bookings from DB & Set room name
+            let bookingDetail = (await axios.get(`http://localhost:2000/api/booking/listBookingByActor/${user?.email}`)).data;
+            for (let i = 0; i < bookingDetail.length; i++) {
+                for (const room of MockupRoom) {
+                    if (bookingDetail[i].room_id === room.id){
+                        bookingDetail[i].name = room.title;
+                        break;
+                    } 
+                }
+            }
+
+            let history = (await axios.get(`http://localhost:2000/api/booking/listHistoryByActor/${user?.email}`)).data;
+            for (let i = 0; i < history.length; i++) {
+                for (const room of MockupRoom) {
+                    if (history[i].room_id === room.id){
+                        history[i].name = room.title;
+                        break;
+                    } 
+                }
+            }
+
+            setBookingDetail(bookingDetail);
+            setHistory(history);
             setUser(decoded);
         };
 
