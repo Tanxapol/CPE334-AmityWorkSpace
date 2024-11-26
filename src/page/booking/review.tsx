@@ -13,6 +13,8 @@ import { ReviewData } from "../../types/Review"
 import { Token } from "../../types/Token"
 import { decodedToken } from "../../components/utils/auth"
 import { CiSettings } from "react-icons/ci"
+import axios from "axios"
+import MockupActor from "../../Data/MockupActor"
 
 const amenities = [
     {
@@ -37,63 +39,106 @@ const amenities = [
     },
 ]
 
-const data = [
-    {
-        title: 'Ant Design Title 1',
-        rate: 3
-    },
-    {
-        title: 'Ant Design Title 2',
-        rate: 4
-    },
-    {
-        title: 'Ant Design Title 3',
-        rate: 5
-    },
-    {
-        title: 'Ant Design Title 4',
-        rate: 2.5
-    },
-];
+// const data = [
+//     {
+//         title: 'Ant Design Title 1',
+//         rate: 3
+//     },
+//     {
+//         title: 'Ant Design Title 2',
+//         rate: 4
+//     },
+//     {
+//         title: 'Ant Design Title 3',
+//         rate: 5
+//     },
+//     {
+//         title: 'Ant Design Title 4',
+//         rate: 2.5
+//     },
+// ];
 
 export default function Review() {
     const { room_id } = useParams<{ room_id: string }>()
+    const { booking_id } = useParams<{ booking_id: string}>()
     const [roomdetail, setRoomdetail] = useState<Rooms | null>(null)
     const [user, setUser] = useState<Token | null>(null)
+    const [data, setData] = useState<ReviewData[]>([]);
+    const [avgStar, setAvgStar] = useState<number>(0);
 
     useEffect(() => {
-        try {
-            const room_detail = MockupRoom.find((room) => room.id === Number(room_id))
-            if (room_detail) {
-                console.log("Room detail:", room_detail);
+        const fetchRoom = async () => {
+            try {
+                const room_detail = MockupRoom.find((room) => room.id === Number(room_id))
+                if (room_detail) {
+                    console.log("Room detail:", room_detail);
+    
+                    // Fetch reviews from DB
+                    const reviews = (await axios.get(`http://localhost:2000/api/booking/listReviewByRoom/${room_id}`)).data;
 
-                setRoomdetail(room_detail)
-            } else {
-                setRoomdetail(null)
+                    // Preparing data for display & find avg star of review
+                    const data: { id: number; actor: string; rating: number; comment: string }[] = [];
+                    let sum = 0;
+                    reviews.forEach((review: { id: number; email: string; review: string; star: number }) => {
+                        for (const actor of MockupActor) {
+                            if (review.email === actor.email) {
+                                data.push({
+                                    id: review.id,
+                                    actor: actor.firstname + " " + actor.lastname,
+                                    rating: review.star,
+                                    comment: review.review
+                                })
+                            }
+                        }
+
+                        sum += review.star;
+                    })
+
+                    if (reviews.length === 0) setAvgStar(0)
+                    else                      setAvgStar(sum / reviews.length)
+                    setData(data)
+                    setRoomdetail(room_detail)
+                } else {
+                    setRoomdetail(null)
+                }
+            } catch (error) {
+                console.error("Error fetching room detail:", error)
             }
-        } catch (error) {
-            console.error("Error fetching room detail:", error)
-        }
+        };
 
         const fetchUser = async () => {
             const decoded = await decodedToken();
             setUser(decoded);
         };
 
+        fetchRoom();
         fetchUser();
 
     }, [room_id])
 
-    const onFinish: FormProps<BookingForm>['onFinish'] = async (values) => {
+    const onFinish: FormProps<ReviewData>['onFinish'] = async (values) => {
+        // rating comment
+        await axios.patch(`http://localhost:2000/api/booking/update/${Number(booking_id)}`, {
+            star: values.rating,
+            review: values.comment
+        })
+
         console.log('Input Success:', values);
+        window.location.reload()
     }
 
-    const onFinishFailed: FormProps<BookingForm>['onFinishFailed'] = (errorInfo) => {
+    const onFinishFailed: FormProps<ReviewData>['onFinishFailed'] = (errorInfo) => {
         console.log('Input Failed:', errorInfo);
     }
 
-    const itemDropSetting = (): MenuProps['items'] => [
-        { key: '1', label: 'Delete', onClick: () => { } },
+    const itemDropSetting = (item: ReviewData): MenuProps['items'] => [
+        { key: '1', label: 'Delete', onClick: async ()  => { 
+            await axios.patch(`http://localhost:2000/api/booking/update/${Number(item.id)}`, {
+                star: null,
+                review: null
+            }) 
+            window.location.reload()
+        } },
     ]
 
     return (
@@ -115,7 +160,7 @@ export default function Review() {
 
                 <div className="flex flex-col basis-1/2">
                     <div className="flex justify-end">
-                        <div><p className="CONTENT-LG-16 mr-10"><StarFilled style={{ color: '#FADB14' }} /> {roomdetail?.star}  |  7 Reviews</p></div>
+                        <div><p className="CONTENT-LG-16 mr-10"><StarFilled style={{ color: '#FADB14' }} /> {avgStar}  |  {data.length} Reviews</p></div>
 
                     </div>
                     <div className="flex flex-row">
@@ -161,7 +206,7 @@ export default function Review() {
                             onFinishFailed={onFinishFailed}
                             scrollToFirstError
                         >
-                            <Form.Item
+                            <Form.Item<ReviewData>
                                 label=""
                                 name="rating"
                                 rules={[{ required: true, message: 'Please input your rating!' }]}
@@ -199,12 +244,12 @@ export default function Review() {
                                     title={
                                         <div className="flex justify-between">
                                             <div className="">
-                                                <span className="pr-4">{item.title}</span>
-                                                <Rate disabled defaultValue={item.rate} />
+                                                <span className="pr-4">{item.actor}</span>
+                                                <Rate disabled allowHalf defaultValue={item.rating} />
                                             </div>
                                             <div className="">
                                                 {user?.role && ['staff', 'admin'].includes(user.role) ?
-                                                    <Dropdown menu={{ items: itemDropSetting() }}>
+                                                    <Dropdown menu={{ items: itemDropSetting(item) }}>
                                                         <Button type="primary"><CiSettings />Setting</Button>
                                                         {/* <Space></Space> */}
                                                         {/* <a onClick={(e) => e.preventDefault()}>
@@ -215,7 +260,7 @@ export default function Review() {
                                             </div>
                                         </div>
                                     }
-                                    description="Ant Design, a design language for background applications, is refined by Ant UED Team"
+                                    description={item.comment}
                                 />
                             </List.Item>
                         )}

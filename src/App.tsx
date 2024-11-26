@@ -46,7 +46,7 @@ export default function App() {
               <Route path="room" element={<Room />} />
               <Route path="booking/:room_id" element={<Booking />} />
               <Route path="profile" element={<UserProfile />} />
-              <Route path='review/:room_id' element={<Review />} />
+              <Route path='review/:room_id/:booking_id' element={<Review />} />
             </Route>
 
             {/* LOGIN  Staff*/}
