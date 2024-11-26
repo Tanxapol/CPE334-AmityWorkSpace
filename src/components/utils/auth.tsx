@@ -67,7 +67,12 @@ export const logout = async () => {
 export const decodedToken = async (): Promise<Token> => {
     const token = localStorage.getItem('token');
     if (!token) {
-        return null;
+        return {
+            role: "-1",
+            firstname: "",
+            lastname: "",
+            email: ""
+        }
     }
 
     try {
@@ -77,7 +82,7 @@ export const decodedToken = async (): Promise<Token> => {
         console.error("Decoded token error:", error);
         window.location.href = '/login';
         return {
-            role: "",
+            role: "-1",
             firstname: "",
             lastname: "",
             email: ""

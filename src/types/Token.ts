@@ -3,7 +3,7 @@ export type Token = {
     firstname: string
     lastname: string
     email: string
-} | null
+}
 
 export interface TokenData {
     role: string

@@ -1,17 +1,6 @@
 import { DownOutlined } from "@ant-design/icons";
 import { APIProvider, Map, Marker } from "@vis.gl/react-google-maps";
-import {
-    Button,
-    Card,
-    ConfigProvider,
-    Dropdown,
-    GetProps,
-    Input,
-    MenuProps,
-    Slider,
-    Space,
-    DatePicker,
-} from "antd";
+import { Button, Card, ConfigProvider, Dropdown, GetProps, Input, MenuProps, Slider, Space, DatePicker } from "antd";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CiSettings } from "react-icons/ci";
@@ -25,9 +14,10 @@ export default function Room() {
     const [user, setUser] = useState<Token | null>(null)
     // const [value, setValue] = useState(30);
     const [hoveredMarker, setHoveredMarker] = useState<number | null>(null);
-    const [filteredRooms, setFilteredRooms] = useState(MockupRoom);
+    const [filteredRooms, setFilteredRooms] = useState<typeof MockupRoom>([]);
     const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
     const navigate = useNavigate();
+
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -35,17 +25,29 @@ export default function Room() {
             setUser(decoded);
         };
 
+        const fetchRoom = async () => {
+            const search = new URLSearchParams(window.location.search).get('search');
+            if (search) {
+                const filteredroom = MockupRoom.filter((room) => room.title.toLowerCase().includes(search.toLowerCase()));
+                setFilteredRooms(filteredroom);
+            } else {
+                setFilteredRooms(MockupRoom);
+            }
+        }
+
         fetchUser();
+        fetchRoom();
     }, [])
 
     type SearchProps = GetProps<typeof Input.Search>;
     const { Search } = Input;
     const onSearch: SearchProps['onSearch'] = (value, _e, info) => {
         console.log("search input from orange one", info?.source, value);
-        const filteredroom = MockupRoom.filter((room) => room.title.toLowerCase().includes(value.toLowerCase()));
-        console.log("filtered room", filteredroom);
-        setFilteredRooms(filteredroom);
-        // window.location.href = `room?search=${value}`;
+        // const filteredroom = MockupRoom.filter((room) => room.title.toLowerCase().includes(value.toLowerCase()));
+        // console.log("filtered room", filteredroom);
+        // setFilteredRooms(filteredroom);
+        // <Navigate to={`room?search=${value}`} />;
+        window.location.href = `?search=${value}`
     }
 
     console.log("this is mockupRoom", MockupRoom);
@@ -159,6 +161,7 @@ export default function Room() {
                                     defaultValue={new URLSearchParams(window.location.search).get('search') || ''}
                                     allowClear
                                     onSearch={onSearch}
+                                    onClear={() => window.location.href = "?search="}
                                     enterButton
                                 />
                             </ConfigProvider>
@@ -247,7 +250,7 @@ export default function Room() {
                                 <Marker
                                     key={index}
                                     position={{ lat: card.lat, lng: card.lng }}
-                                    
+
                                     onMouseOver={() => { handleMarkerHover(index) }}
                                     onMouseOut={() => setHoveredMarker(null)}
                                 />

@@ -42,7 +42,7 @@ export default function App() {
               path="user"
               element={<Checklogin islogin="user" elements={<Navuser />} />}
             >
-              <Route index element={<p>user index</p>} />
+              <Route index element={<Home />} />
               <Route path="room" element={<Room />} />
               <Route path="booking/:room_id" element={<Booking />} />
               <Route path="profile" element={<UserProfile />} />
@@ -54,7 +54,7 @@ export default function App() {
               path="staff"
               element={<Checklogin islogin="staff" elements={<Navstaff />} />}
             >
-              <Route index element={<p>staff index</p>} />
+              <Route index element={<Home />} />
               <Route path="room" element={<Room />} />
               <Route path='profile' element={<StaffProfile />} />
               <Route path='createroom' element={<Createroom />} />
@@ -65,7 +65,7 @@ export default function App() {
               path="admin"
               element={<Checklogin islogin="admin" elements={<Navadmin />} />}
             >
-              <Route index element={<p>admin index</p>} />
+              <Route index element={<Home />} />
               <Route path="room" element={<Room />} />
               <Route path='profile' element={<AdminProfile />} />
               <Route path='room/reprot/:room_id' element={<Reportbooking />} />

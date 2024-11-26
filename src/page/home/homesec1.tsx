@@ -1,10 +1,33 @@
 import { ConfigProvider, GetProps, Input } from "antd";
+import { useState, useEffect } from "react";
+import { TokenData } from "../../types/Token";
+import { decodedToken } from "../../components/utils/auth";
 
 export default function Homesec1() {
+    const [user, setUser] = useState<TokenData | null>(null)
+
+    useEffect(() => {
+        const fetchUser = async () => {
+            const decoded = await decodedToken();
+            console.log(decoded);
+            
+            setUser(decoded)
+        };
+
+        fetchUser();
+    }, []);
 
     type SearchProps = GetProps<typeof Input.Search>;
     const { Search } = Input;
-    const onSearch: SearchProps['onSearch'] = (value, _e, info) => console.log(info?.source, value);
+    const onSearch: SearchProps['onSearch'] = (value, _e, info) => {
+        console.log(info?.source, value)
+
+        if (user?.role === "-1") {
+            window.location.href = "login"
+        } else {
+            window.location.href = `/${user?.role}/room?search=${value}`
+        }
+    };
 
     return (
         <div className="flex flex-row flex-wrap items-center min-h-dvh w-full p-10 bg-gradient-to-r from-gradient to-gd">
