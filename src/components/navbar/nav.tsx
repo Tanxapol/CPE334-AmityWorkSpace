@@ -25,7 +25,7 @@ export default function Navbar({ navList }: props) {
             const decoded = await decodedToken();
             setUser(decoded);
 
-            if (decoded === null) {
+            if (decoded?.role === '-1') {
                 setIsLogin(false)
             } else {
                 setIsLogin(true)
@@ -36,7 +36,11 @@ export default function Navbar({ navList }: props) {
     }, []);
 
     // const [search, setSearch] = useState<string>('')
-    const onSearch: SearchProps['onSearch'] = (value, _e, info) => { console.log(info?.source, value); }
+    const onSearch: SearchProps['onSearch'] = (value, _e, info) => { 
+        console.log(info?.source, value);
+        window.location.href = `/${user?.role}/room?search=${value}`
+        
+    }
 
     // const handleProfile = () => {
     //     // window.location.href = '/user/profile'
@@ -54,6 +58,7 @@ export default function Navbar({ navList }: props) {
                         allowClear
                         defaultValue={new URLSearchParams(window.location.search).get('search') || ''}
                         onSearch={onSearch}
+                        onClear={() => window}
                     />
                     {navList.map((item, index) => (
                         <Link key={index} to={item.path} className="CONTENT-LG-16 font-bold text-white hover:text-F07C41 mx-6">{item.name}</Link>
