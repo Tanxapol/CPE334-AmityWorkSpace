@@ -18,7 +18,7 @@ exports.create = async (req, res) => {
         for (let booking of bookings) {
             const oldStart = new Date(booking.start_time).getTime()
             const oldEnd = new Date(booking.end_time).getTime()
-            if ((oldStart <= newStart && newStart < oldEnd) || (oldStart < newEnd && newEnd <= oldEnd)) {
+            if (room_id === booking.room_id && ((oldStart <= newStart && newStart < oldEnd) || (oldStart < newEnd && newEnd <= oldEnd))) {
                 return res.status(400).json({ message: 'The requested time is not available. Kindly try again.' })
             }
         }
