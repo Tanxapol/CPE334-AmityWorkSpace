@@ -74,7 +74,7 @@ export default function Review() {
                     console.log("Room detail:", room_detail);
     
                     // Fetch reviews from DB
-                    const reviews = (await axios.get(`http://localhost:2000/api/booking/listReviewByRoom/${room_id}`)).data;
+                    const reviews = (await axios.get(`http://localhost:8080/api/booking/listReviewByRoom/${room_id}`)).data;
 
                     // Preparing data for display & find avg star of review
                     const data: { id: number; actor: string; rating: number; comment: string }[] = [];
@@ -118,7 +118,7 @@ export default function Review() {
 
     const onFinish: FormProps<ReviewData>['onFinish'] = async (values) => {
         // rating comment
-        await axios.patch(`http://localhost:2000/api/booking/update/${Number(booking_id)}`, {
+        await axios.patch(`http://localhost:8080/api/booking/update/${Number(booking_id)}`, {
             star: values.rating,
             review: values.comment
         })
@@ -133,7 +133,7 @@ export default function Review() {
 
     const itemDropSetting = (item: ReviewData): MenuProps['items'] => [
         { key: '1', label: 'Delete', onClick: async ()  => { 
-            await axios.patch(`http://localhost:2000/api/booking/update/${Number(item.id)}`, {
+            await axios.patch(`http://localhost:8080/api/booking/update/${Number(item.id)}`, {
                 star: null,
                 review: null
             }) 

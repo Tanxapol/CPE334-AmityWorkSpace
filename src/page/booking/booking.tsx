@@ -89,7 +89,7 @@ export default function Booking() {
                     console.log("Room detail:", room_detail);
     
                     // Fetch reviews from DB
-                    const reviews = (await axios.get(`http://localhost:2000/api/booking/listReviewByRoom/${room_id}`)).data;
+                    const reviews = (await axios.get(`http://localhost:8080/api/booking/listReviewByRoom/${room_id}`)).data;
 
                     // Preparing data for display & find avg star of review
                     const data: { id: number; actor: string; rating: number; comment: string }[] = [];
@@ -150,7 +150,7 @@ export default function Booking() {
 
         // Create booking in DB 
         try {
-            const res = await axios.post("http://localhost:2000/api/booking/create", data);
+            const res = await axios.post("http://localhost:8080/api/booking/create", data);
             console.log(res.data)
         } catch (err) {
             alert(err.response.data.message)
@@ -165,7 +165,7 @@ export default function Booking() {
 
     const itemDropSetting = (item: ReviewData): MenuProps['items'] => [
         { key: '1', label: 'Delete', onClick: async ()  => { 
-            await axios.patch(`http://localhost:2000/api/booking/update/${Number(item.id)}`, {
+            await axios.patch(`http://localhost:8080/api/booking/update/${Number(item.id)}`, {
                 star: null,
                 review: null
             }) 

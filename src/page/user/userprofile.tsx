@@ -19,7 +19,7 @@ export default function UserProfile() {
             const decoded = await decodedToken();
 
             // Fetch bookings from DB & Set room name
-            let bookingDetail = (await axios.get(`http://localhost:2000/api/booking/listBookingByActor/${user?.email}`)).data;
+            let bookingDetail = (await axios.get(`http://localhost:8080/api/booking/listBookingByActor/${user?.email}`)).data;
             for (let i = 0; i < bookingDetail.length; i++) {
                 for (const room of MockupRoom) {
                     if (bookingDetail[i].room_id === room.id){
@@ -29,7 +29,7 @@ export default function UserProfile() {
                 }
             }
 
-            let history = (await axios.get(`http://localhost:2000/api/booking/listHistoryByActor/${user?.email}`)).data;
+            let history = (await axios.get(`http://localhost:8080/api/booking/listHistoryByActor/${user?.email}`)).data;
             for (let i = 0; i < history.length; i++) {
                 for (const room of MockupRoom) {
                     if (history[i].room_id === room.id){
@@ -84,7 +84,7 @@ export default function UserProfile() {
                         <Button onClick={() => window.location.href=`review/${_item.room_id}/${_item.id}`} type="primary" className="ml-4">REVIEW</Button>
                     ) : (
                         <Button onClick={ async () => {
-                            await axios.delete(`http://localhost:2000/api/booking/remove/${_item.id}`)
+                            await axios.delete(`http://localhost:8080/api/booking/remove/${_item.id}`)
                             window.location.reload()
                         } } type="primary">CANCEL</Button>
                     )}
