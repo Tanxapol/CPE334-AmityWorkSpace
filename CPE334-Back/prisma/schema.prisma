@@ -1,0 +1,135 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// Push your schema changes to the database without generating migrations
+// npx prisma db push
+
+// Mockup Model
+model Booking {
+  id         Int      @id @default(autoincrement())
+  email      String
+  room_id    Int
+  start_time DateTime
+  end_time   DateTime
+  star       Float?
+  review     String?
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+// model Actor {
+//   id           Int       @id @default(autoincrement())
+//   role         Role      @relation(fields: [role_id], references: [id])
+//   role_id      Int
+//   firstname    String
+//   lastname     String
+//   phone_number String
+//   email        String    @unique
+//   password     String
+//   bookings     Booking[]
+//   created_at   DateTime  @default(now())
+//   updated_at   DateTime  @updatedAt
+// }
+
+// model Role {
+//   id         Int      @id @default(autoincrement())
+//   name       String
+//   actors     Actor[]
+//   created_at DateTime @default(now())
+//   updated_at DateTime @updatedAt
+// }
+
+// model Booking {
+//   id         Int      @id @default(autoincrement())
+//   actor      Actor    @relation(fields: [actor_id], references: [id])
+//   actor_id   Int
+//   room       Room     @relation(fields: [room_id], references: [id])
+//   room_id    Int
+//   date_time  DateTime
+//   review     Review?
+//   created_at DateTime @default(now())
+//   updated_at DateTime @updatedAt
+// }
+
+// model Review {
+//   id         Int      @id @default(autoincrement())
+//   booking    Booking  @relation(fields: [booking_id], references: [id])
+//   booking_id Int      @unique
+//   content    String
+//   created_at DateTime @default(now())
+//   updated_at DateTime @updatedAt
+// }
+
+// model Room {
+//   id              Int             @id @default(autoincrement())
+//   building        Building        @relation(fields: [building_id], references: [id])
+//   building_id     Int
+//   name            String
+//   description     String
+//   capacity        Int
+//   Floor           Int
+//   bookings        Booking[]
+//   amenity_on_room AmenityOnRoom[]
+//   images          Image[]
+//   created_at      DateTime        @default(now())
+//   updated_at      DateTime        @updatedAt
+// }
+
+// model AmenityOnRoom {
+//   id         Int      @id @default(autoincrement())
+//   room       Room     @relation(fields: [room_id], references: [id], onDelete: Cascade)
+//   room_id    Int
+//   amenity    Amenity  @relation(fields: [amenity_id], references: [id], onDelete: Cascade)
+//   amenity_id Int
+//   created_at DateTime @default(now())
+//   updated_at DateTime @updatedAt
+// }
+
+// model Amenity {
+//   id              Int             @id @default(autoincrement())
+//   name            Int
+//   amenity_on_room AmenityOnRoom[]
+//   created_at      DateTime        @default(now())
+//   updated_at      DateTime        @updatedAt
+// }
+
+// model Image {
+//   id         Int      @id @default(autoincrement())
+//   room       Room     @relation(fields: [room_id], references: [id])
+//   room_id    Int
+//   image_url  String
+//   created_at DateTime @default(now())
+//   updated_at DateTime @updatedAt
+// }
+
+// model Building {
+//   id         Int      @id @default(autoincrement())
+//   company    Company  @relation(fields: [company_id], references: [id])
+//   company_id Int
+//   name       String
+//   lat        Float
+//   long       Float
+//   rooms      Room[]
+//   created_at DateTime @default(now())
+//   updated_at DateTime @updatedAt
+// }
+
+// model Company {
+//   id         Int        @id @default(autoincrement())
+//   name       String
+//   buildings  Building[]
+//   created_at DateTime   @default(now())
+//   updated_at DateTime   @updatedAt
+// }

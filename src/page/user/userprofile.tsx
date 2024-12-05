@@ -4,14 +4,43 @@ import { Token } from "../../types/Token";
 import { decodedToken, logout } from "../../components/utils/auth";
 import { BookingHistoryData } from "../../types/Profile";
 import MockupBookingDetail from "../../Data/MockupBookingDetail";
+import { BookingDetailData } from "../../types/ฺBooking"
+import axios from "axios"
+import MockupRoom from "../../Data/MockupRoom"
 
 export default function UserProfile() {
     const [table, setTable] = useState(0)
     const [user, setUser] = useState<Token | null>(null)
+    const [bookingDetail, setBookingDetail] = useState<BookingDetailData[]>([])
+    const [history, setHistory] = useState<BookingDetailData[]>([])
 
     useEffect(() => {
         const fetchUser = async () => {
             const decoded = await decodedToken();
+
+            // Fetch bookings from DB & Set room name
+            let bookingDetail = (await axios.get(`http://localhost:8080/api/booking/listBookingByActor/${user?.email}`)).data;
+            for (let i = 0; i < bookingDetail.length; i++) {
+                for (const room of MockupRoom) {
+                    if (bookingDetail[i].room_id === room.id){
+                        bookingDetail[i].name = room.title;
+                        break;
+                    } 
+                }
+            }
+
+            let history = (await axios.get(`http://localhost:8080/api/booking/listHistoryByActor/${user?.email}`)).data;
+            for (let i = 0; i < history.length; i++) {
+                for (const room of MockupRoom) {
+                    if (history[i].room_id === room.id){
+                        history[i].name = room.title;
+                        break;
+                    } 
+                }
+            }
+
+            setBookingDetail(bookingDetail);
+            setHistory(history);
             setUser(decoded);
         };
 
@@ -52,12 +81,12 @@ export default function UserProfile() {
             render: (_value, _item) => (
                 <div className="flex">
                     {table ? (
-                        <Button type="primary" className="ml-4">REVIEW</Button>
+                        <Button onClick={() => window.location.href=`review/${_item.room_id}/${_item.id}`} type="primary" className="ml-4">REVIEW</Button>
                     ) : (
-                        <>
-                            <Button type="primary">CANCEL</Button>
-                            <Button onClick={() => window.location.href=`review/${_item.room_id}`} type="primary" className="ml-4">REVIEW</Button>
-                        </>
+                        <Button onClick={ async () => {
+                            await axios.delete(`http://localhost:8080/api/booking/remove/${_item.id}`)
+                            window.location.reload()
+                        } } type="primary">CANCEL</Button>
                     )}
                 </div>
             ),
@@ -90,7 +119,7 @@ export default function UserProfile() {
 
                 <div className="pt-4">
                     <Table
-                        dataSource={table === 0 ? MockupBookingDetail.filter((item) => new Date(item.date) > new Date()) : MockupBookingDetail.filter((item) => new Date(item.date) < new Date())}
+                        dataSource={table === 0 ? bookingDetail : history}
                         columns={coldetail}
                     />
                 </div>
@@ -98,3 +127,5 @@ export default function UserProfile() {
         </>
     )
 }
+
+// dataSource={table === 0 ? MockupBookingDetail.filter((item) => new Date(item.date) > new Date()) : MockupBookingDetail.filter((item) => new Date(item.date) < new Date())}

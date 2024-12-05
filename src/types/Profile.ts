@@ -8,6 +8,7 @@ export type BookingHistoryDetail = {
 }
 
 export interface BookingHistoryData {
+    id: number;
     number: number;
     room_id: number;
     name: string;
