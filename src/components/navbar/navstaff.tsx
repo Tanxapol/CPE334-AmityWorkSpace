@@ -5,7 +5,7 @@ import Footer from "../footer"
 const NavList = [
     { name: "HOME", path: "/staff" },
     { name: "ROOM", path: "room" },
-    { name: "_staff", path: ""},
+    // { name: "_staff", path: ""},
 ]
 
 export default function Navstaff() {
